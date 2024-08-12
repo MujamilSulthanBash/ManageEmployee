@@ -2,6 +2,7 @@ package com.i2i.ems.employee.service;
 
 import java.util.List;
 
+import com.i2i.ems.employee.dto.EmployeeDto;
 import com.i2i.ems.model.Employee;
 
 /**
@@ -12,17 +13,17 @@ public interface EmployeeService {
     /**
      * Save Employee entity.
      *
-     * @param employee - employee details.
+     * @param employeeDto - employee details.
      * @return the saved employee.
      */
-    Employee saveEmployee(Employee employee);
+    EmployeeDto saveEmployee(EmployeeDto employeeDto);
 
     /**
      * retrieve set of Employees.
      *
      * @return list of employees.
      */
-    List<Employee> retrieveEmployees();
+    List<EmployeeDto> retrieveEmployees();
 
     /**
      * retrieve Employee By id.
@@ -30,20 +31,28 @@ public interface EmployeeService {
      * @param id - employee id.
      * @return the saved employee.
      */
-    Employee retrieveEmployeeById(Long id);
+    EmployeeDto retrieveEmployeeById(Long id);
 
     /**
      * update Employee entity.
      *
-     * @param employee - employee details.
+     * @param employeeDto - employee details.
      * @return the updated employee.
      */
-    Employee updateEmployee(Employee employee);
+    EmployeeDto updateEmployee(EmployeeDto employeeDto);
 
     /**
      * delete Employee entity.
      *
-     * @param employee - employee details.
+     * @param id - employee details.
      */
-    void deleteEmployee(Employee employee);
+    void deleteEmployee(Long id);
+
+    EmployeeDto assignDepartment(Long employeeId, Long departmentId);
+
+    EmployeeDto assignProject(Long employeeId, Long projectId);
+
+    List<EmployeeDto> getEmployeeByDepartment(Long id);
+
+    List<EmployeeDto> getEmployeeByProject(Long id);
 }

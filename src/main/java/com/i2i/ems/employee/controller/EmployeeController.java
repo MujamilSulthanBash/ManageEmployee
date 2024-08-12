@@ -1,22 +1,21 @@
 package com.i2i.ems.employee.controller;
 
-import com.i2i.ems.department.dto.DepartmentDto;
-import com.i2i.ems.department.service.DepartmentService;
-import com.i2i.ems.employee.dto.EmployeeDto;
-import com.i2i.ems.employee.mapper.EmployeeMapper;
-import com.i2i.ems.employee.service.EmployeeService;
-import com.i2i.ems.model.Department;
-import com.i2i.ems.model.Employee;
-import com.i2i.ems.model.Project;
-import com.i2i.ems.project.dto.ProjectDto;
-import com.i2i.ems.project.service.ProjectService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.i2i.ems.employee.dto.EmployeeDto;
+import com.i2i.ems.employee.service.EmployeeService;
 
 @RestController()
 @RequestMapping("ems/api/v1/employees")
@@ -25,85 +24,52 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @Autowired
-    private DepartmentService departmentService;
-
-    @Autowired
-    private ProjectService projectService;
-
     @PostMapping
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto) {
-        return new ResponseEntity(
-                EmployeeMapper.mapEmployeeDto(
-                        employeeService.saveEmployee(
-                                EmployeeMapper.mapEmployee(
-                                        employeeDto
-                                )
-                        )
-                ), HttpStatus.CREATED);
+        return new ResponseEntity<>(employeeService.saveEmployee(employeeDto), HttpStatus.CREATED);
     }
-
-    @PostMapping("/assigndepartment")
-    public ResponseEntity<EmployeeDto> assignDepartment(@RequestBody EmployeeDto employeeDto, @RequestBody DepartmentDto departmentDto, @PathVariable Long employeeId, @PathVariable Long departmentId) {
-        Employee employee = employeeService.retrieveEmployeeById(employeeId);
-        Department department = departmentService.retrieveDepartmentById(departmentId);
-        employee.setDepartment(department);
-        EmployeeDto assignDepartment = EmployeeMapper.mapEmployeeDto(
-                employeeService.saveEmployee(employee)
-        );
-        return new ResponseEntity(assignDepartment, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/assignproject")
-    public ResponseEntity<EmployeeDto> assignProject(@RequestBody EmployeeDto employeeDto, @RequestBody ProjectDto projectDto, @PathVariable Long employeeId, @PathVariable Long projectId) {
-        Employee employee = employeeService.retrieveEmployeeById(employeeId);
-        Project project = projectService.retrieveProjectById(projectId);
-        List<Project> projects = new ArrayList<>();
-        projects.add(project);
-        employee.setProjects(projects);
-        return new ResponseEntity<>(
-                EmployeeMapper.mapEmployeeDto(
-                        employeeService.saveEmployee(employee)
-                ), HttpStatus.OK
-        );
-    }
-
 
     @GetMapping
     public ResponseEntity<List<EmployeeDto>> getEmployees() {
-        List<EmployeeDto> employeeDtos = new ArrayList<>();
-        List<Employee> employees = employeeService.retrieveEmployees();
-        for (Employee employee : employees) {
-            employeeDtos.add(EmployeeMapper.mapEmployeeDto(employee));
-        }
-        return new ResponseEntity(employeeDtos, HttpStatus.OK);
+        List<EmployeeDto> employeesDto = employeeService.retrieveEmployees();
+        return new ResponseEntity<>(employeesDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id) {
-        return new ResponseEntity(
-                EmployeeMapper.mapEmployeeDto(
-                        employeeService.retrieveEmployeeById(id)
-                ), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.retrieveEmployeeById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDto updateEmployeeDto) {
-        Employee employee = employeeService.retrieveEmployeeById(id);
-        Employee updatedEmployee = EmployeeMapper.mapEmployee(updateEmployeeDto);
-        updatedEmployee.setId(employee.getId());
-        return new ResponseEntity(
-                EmployeeMapper.mapEmployeeDto(
-                        employeeService.updateEmployee(
-                                updatedEmployee)
-                ), HttpStatus.OK);
+    @PutMapping()
+    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto updateEmployeeDto) {
+        return new ResponseEntity<>(employeeService.updateEmployee(updateEmployeeDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
-        Employee employee = employeeService.retrieveEmployeeById(id);
-        employeeService.deleteEmployee(employee);
-        return new ResponseEntity(HttpStatus.OK);
+        employeeService.deleteEmployee(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("{employeeId}/assigndepartment/{departmentId}")
+    public ResponseEntity<EmployeeDto> assignDepartment(@PathVariable Long employeeId, @PathVariable Long departmentId) {
+        return new ResponseEntity<>(employeeService.assignDepartment(employeeId, departmentId), HttpStatus.CREATED);
+    }
+
+    @PutMapping("{employeeId}/assignproject/{projectId}")
+    public ResponseEntity<EmployeeDto> assignProject(@PathVariable Long employeeId, @PathVariable Long projectId) {
+        return new ResponseEntity<>(employeeService.assignProject(employeeId, projectId), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("department/{id}")
+    public ResponseEntity<List<EmployeeDto>> getEmployeeByDepartment(Long id){
+        return new ResponseEntity<List<EmployeeDto>>(employeeService.getEmployeeByDepartment(id), HttpStatus.OK);
+    }
+
+    @GetMapping("project/{id}")
+    public ResponseEntity<List<EmployeeDto>> getEmployeeByProject(Long id){
+        return new ResponseEntity<List<EmployeeDto>>(employeeService.getEmployeeByProject(id), HttpStatus.OK);
     }
 
 }

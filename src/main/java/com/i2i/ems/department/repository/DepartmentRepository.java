@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Repository interface for Department entity.
@@ -28,5 +27,5 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
      * @return Optional<Department> - May or May not return Department details
      */
     @Query("from Department where id = ?1 and isDelete = false")
-    Optional<Department> findDepartmentById(Long id);
+    Department findDepartmentById(Long id);
 }

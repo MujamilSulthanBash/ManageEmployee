@@ -1,49 +1,51 @@
 package com.i2i.ems.laptop.service;
 
-import com.i2i.ems.model.Laptop;
-
 import java.util.List;
+
+import com.i2i.ems.laptop.dto.LaptopDto;
 
 /**
  * Service interface for Employee entity.
  * Defines methods for CRUD operations and additional business logic.
  */
 public interface LaptopService {
-    /**
-     * Save Laptop entity.
-     *
-     * @param laptop - laptop details.
-     * @return the saved laptop.
-     */
-    Laptop saveLaptop(Laptop laptop);
 
     /**
-     * retrieve set of Laptops.
+     * This method is responsible for Save Laptop entity.
      *
-     * @return list of laptops.
+     * @param laptopDto - {@link LaptopDto}
+     * @return LaptopDto - saved {@link LaptopDto} details.
      */
-    List<Laptop> retrieveLaptops();
+    LaptopDto saveLaptop(LaptopDto laptopDto);
 
     /**
-     * retrieve laptop By id.
+     * This method is responsible for retrieve List of Laptops.
+     *
+     * @return List<LaptopDto> - {@link LaptopDto} details
+     */
+    List<LaptopDto> retrieveLaptops();
+
+    /**
+     * This method is responsible for retrieve Laptop By id.
      *
      * @param id - laptop id.
-     * @return the saved laptop.
+     * @return - {@link LaptopDto} details.
      */
-    Laptop retrieveLaptopById(Long id);
+    LaptopDto retrieveLaptopById(Long id);
 
     /**
-     * update Laptop entity.
+     * This method is responsible for update Employee entity.
      *
-     * @param laptop - laptop details.
-     * @return the updated Laptop.
+     * @param laptopDto - {@link LaptopDto} details.
+     * @return - updated {@link LaptopDto} details.
      */
-    Laptop updateLaptop(Laptop laptop);
+    LaptopDto updateLaptop(LaptopDto laptopDto);
 
     /**
-     * delete Laptop entity.
+     * This method is responsible for delete Employee entity.
      *
-     * @param laptop - laptop details.
+     * @param id - laptopId.
      */
-    void deleteLaptop(Laptop laptop);
+    void deleteLaptop(Long id);
+
 }

@@ -1,18 +1,21 @@
 package com.i2i.ems.employee.service;
 
-import com.i2i.ems.department.repository.DepartmentRepository;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.i2i.ems.department.mapper.DepartmentMapper;
+import com.i2i.ems.department.service.DepartmentService;
 import com.i2i.ems.employee.dto.EmployeeDto;
 import com.i2i.ems.employee.mapper.EmployeeMapper;
 import com.i2i.ems.employee.repository.EmployeeRepository;
 import com.i2i.ems.model.Department;
 import com.i2i.ems.model.Employee;
 import com.i2i.ems.model.Project;
-import com.i2i.ems.project.repository.ProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.i2i.ems.project.mapper.ProjectMapper;
+import com.i2i.ems.project.service.ProjectService;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -21,10 +24,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private DepartmentRepository departmentRepository;
+    private DepartmentService departmentService;
 
     @Autowired
-    private ProjectRepository projectRepository;
+    private ProjectService projectService;
 
 
     @Override
@@ -64,17 +67,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto assignDepartment(Long employeeId, Long departmentId) {
         Employee employee = employeeRepository.findEmployeeByIdAndIsDeleteFalse(employeeId);
-        employee.setDepartment(departmentRepository.findDepartmentById(departmentId));
-        return EmployeeMapper.mapEmployeeDto(employeeRepository.save(employee));
+        employee.setDepartment(DepartmentMapper.mapDepartment(departmentService.retrieveDepartmentById(departmentId)));
+        return EmployeeMapper.mapEmployeeDtoForProject(employeeRepository.save(employee));
     }
 
     @Override
     public EmployeeDto assignProject(Long employeeId, Long projectId) {
         Employee employee = employeeRepository.findEmployeeByIdAndIsDeleteFalse(employeeId);
-        Project project = projectRepository.findProjectById(projectId);
-        List<Project> projects = new ArrayList<>();
-        projects.add(project);
-        employee.setProjects(projects);
+        Project project = ProjectMapper.mapProject(projectService.retrieveProjectById(projectId));
+        if (employee.getProjects() == null) {
+            List<Project> projects = new ArrayList<>();
+            projects.add(project);
+            employee.setProjects(projects);
+        } else {
+            employee.getProjects().add(project);
+
+        }
         employeeRepository.save(employee);
         return EmployeeMapper.mapEmployeeDtoForProject(employee);
     }
@@ -82,9 +90,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDto> getEmployeeByDepartment(Long id) {
         List<EmployeeDto> employeesDto = new ArrayList<>();
-        Department department = departmentRepository.findDepartmentById(id);
+        Department department = DepartmentMapper.mapDepartment(departmentService.retrieveDepartmentById(id));
         for (Employee employee : department.getEmployees()) {
-            employeesDto.add(EmployeeMapper.mapEmployeeDto(employee));
+            employeesDto.add(EmployeeMapper.mapEmployeeDtoForProject(employee));
         }
         return employeesDto;
     }
@@ -92,7 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDto> getEmployeeByProject(Long id) {
         List<EmployeeDto> employeesDto = new ArrayList<>();
-        Project project = projectRepository.findProjectById(id);
+        Project project = ProjectMapper.mapProject(projectService.retrieveProjectById(id));
         for (Employee employee : project.getEmployees()) {
             employeesDto.add(EmployeeMapper.mapEmployeeDtoForProject(employee));
         }

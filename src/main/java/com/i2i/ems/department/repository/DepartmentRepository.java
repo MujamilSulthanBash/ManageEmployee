@@ -1,11 +1,11 @@
 package com.i2i.ems.department.repository;
 
-import com.i2i.ems.model.Department;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.i2i.ems.model.Department;
 
 /**
  * Repository interface for Department entity.
@@ -13,19 +13,19 @@ import java.util.List;
  */
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
-    /**
-     * custom Query for fetch all Department where isDelete is true
-     *
-     * @return List<Department> - Department details
-     */
-    @Query("from Department where isDelete = false")
-    List<Department> findAllDepartment();
 
     /**
-     * custom Query for fetch Department By id where isDelete is true
+     * This method is responsible for fetch all Department where isDelete is true
      *
-     * @return Optional<Department> - May or May not return Department details
+     * @return List<Department> - {@link Department} details
      */
-    @Query("from Department where id = ?1 and isDelete = false")
-    Department findDepartmentById(Long id);
+    List<Department> findByIsDeleteFalse();
+
+    /**
+     * This method is responsible for fetch Department By id where isDelete is true
+     *
+     * @return Department - {@link Department} details
+     */
+    Department findDepartmentByIdAndIsDeleteFalse(Long id);
+
 }

@@ -1,12 +1,15 @@
 package com.i2i.ems.department.service;
 
-import com.i2i.ems.department.repository.DepartmentRepository;
-import com.i2i.ems.model.Department;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.i2i.ems.department.dto.DepartmentDto;
+import com.i2i.ems.department.mapper.DepartmentMapper;
+import com.i2i.ems.department.repository.DepartmentRepository;
+import com.i2i.ems.model.Department;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -15,27 +18,37 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
 
     @Override
-    public Department saveDepartment(Department department) {
-        return departmentRepository.save(department);
+    public DepartmentDto saveDepartment(DepartmentDto departmentDto) {
+        Department department = DepartmentMapper.mapDepartment(departmentDto);
+        return DepartmentMapper.mapDepartmentDto(departmentRepository.save(department));
     }
 
     @Override
-    public List<Department> retrieveDepartments() {
-        return departmentRepository.findAllDepartment();
+    public List<DepartmentDto> retrieveDepartments() {
+        List<DepartmentDto> departmentsDto = new ArrayList<>();
+        List<Department> departments = departmentRepository.findByIsDeleteFalse();
+        for (Department department : departments) {
+            departmentsDto.add(DepartmentMapper.mapDepartmentDto(department));
+        }
+        return departmentsDto;
     }
 
     @Override
-    public Department retrieveDepartmentById(Long id) {
-        return departmentRepository.findDepartmentById(id);
+    public DepartmentDto retrieveDepartmentById(Long id) {
+        Department department = departmentRepository.findDepartmentByIdAndIsDeleteFalse(id);
+        return DepartmentMapper.mapDepartmentDto(department);
     }
 
     @Override
-    public Department updateDepartment(Department department) {
-        return departmentRepository.save(department);
+    public DepartmentDto updateDepartment(DepartmentDto departmentDto) {
+        Department department = DepartmentMapper.mapDepartment(departmentDto);
+        return DepartmentMapper.mapDepartmentDto(departmentRepository.save(department));
     }
 
     @Override
-    public void deleteDepartment(Department department) {
+    public void deleteDepartment(Long id) {
+        Department department = departmentRepository.findDepartmentByIdAndIsDeleteFalse(id);
+        department.setDelete(true);
         departmentRepository.save(department);
     }
 }

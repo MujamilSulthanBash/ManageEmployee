@@ -51,12 +51,12 @@ public class EmployeeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("{employeeId}/assigndepartment/{departmentId}")
+    @PutMapping("{employeeId}/departments/{departmentId}")
     public ResponseEntity<EmployeeDto> assignDepartment(@PathVariable Long employeeId, @PathVariable Long departmentId) {
         return new ResponseEntity<>(employeeService.assignDepartment(employeeId, departmentId), HttpStatus.CREATED);
     }
 
-    @PutMapping("{employeeId}/assignproject/{projectId}")
+    @PutMapping("{employeeId}/projects/{projectId}")
     public ResponseEntity<EmployeeDto> assignProject(@PathVariable Long employeeId, @PathVariable Long projectId) {
         return new ResponseEntity<>(employeeService.assignProject(employeeId, projectId), HttpStatus.OK
         );

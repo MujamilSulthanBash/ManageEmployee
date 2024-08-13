@@ -1,12 +1,15 @@
 package com.i2i.ems.laptop.service;
 
-import com.i2i.ems.laptop.repository.LaptopRepository;
-import com.i2i.ems.model.Laptop;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.i2i.ems.laptop.dto.LaptopDto;
+import com.i2i.ems.laptop.mapper.LaptopMapper;
+import com.i2i.ems.laptop.repository.LaptopRepository;
+import com.i2i.ems.model.Laptop;
 
 @Service
 public class LaptopServiceImpl implements LaptopService {
@@ -15,29 +18,38 @@ public class LaptopServiceImpl implements LaptopService {
     private LaptopRepository laptopRepository;
 
     @Override
-    public Laptop saveLaptop(Laptop laptop) {
-        return laptopRepository.save(laptop);
+    public LaptopDto saveLaptop(LaptopDto laptopDto) {
+        Laptop laptop = LaptopMapper.mapLaptop(laptopDto);
+        return LaptopMapper.mapLaptopDto(laptopRepository.save(laptop));
     }
 
     @Override
-    public List<Laptop> retrieveLaptops() {
-        return laptopRepository.findAllLaptop();
+    public List<LaptopDto> retrieveLaptops() {
+        List<LaptopDto> laptopsDto = new ArrayList<>();
+        List<Laptop> laptops = laptopRepository.findByIsDeleteFalse();
+        for (Laptop laptop : laptops) {
+            laptopsDto.add(LaptopMapper.mapLaptopDto(laptop));
+        }
+        return laptopsDto;
     }
 
     @Override
-    public Laptop retrieveLaptopById(Long id) {
-        Optional<Laptop> laptop = laptopRepository.findLaptopById(id);
-        return laptop.orElse(null);
+    public LaptopDto retrieveLaptopById(Long id) {
+        Laptop laptop = laptopRepository.findLaptopByIdAndIsDeleteFalse(id);
+        return LaptopMapper.mapLaptopDto(laptop);
     }
 
     @Override
-    public Laptop updateLaptop(Laptop laptop) {
-        return laptopRepository.save(laptop);
+    public LaptopDto updateLaptop(LaptopDto laptopDto) {
+        Laptop laptop = LaptopMapper.mapLaptop(laptopDto);
+        return LaptopMapper.mapLaptopDto(laptopRepository.save(laptop));
     }
 
     @Override
-    public void deleteLaptop(Laptop laptop) {
+    public void deleteLaptop(Long id) {
+        Laptop laptop = laptopRepository.findLaptopByIdAndIsDeleteFalse(id);
         laptop.setDelete(true);
         laptopRepository.save(laptop);
     }
+
 }

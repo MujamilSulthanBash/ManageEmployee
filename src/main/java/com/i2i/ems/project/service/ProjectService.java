@@ -1,50 +1,51 @@
 package com.i2i.ems.project.service;
 
-import com.i2i.ems.model.Project;
-
 import java.util.List;
+
+import com.i2i.ems.project.dto.ProjectDto;
 
 /**
  * Service interface for Employee entity.
  * Defines methods for CRUD operations and additional business logic.
  */
 public interface ProjectService {
-    /**
-     * Save Project entity.
-     *
-     * @param project - project details.
-     * @return the saved project.
-     */
-    Project saveProject(Project project);
 
     /**
-     * retrieve set of Projects.
+     * This method is responsible for Save Project entity.
      *
-     * @return list of projects.
+     * @param projectDto - {@link ProjectDto}
+     * @return ProjectDto - saved {@link ProjectDto} details.
      */
-    List<Project> retrieveProjects();
+    ProjectDto saveProject(ProjectDto projectDto);
 
     /**
-     * retrieve Project By id.
+     * This method is responsible for retrieve List of Projects.
+     *
+     * @return List<ProjectDto> - {@link ProjectDto} details
+     */
+    List<ProjectDto> retrieveProjects();
+
+    /**
+     * This method is responsible for retrieve project By id.
      *
      * @param id - project id.
-     * @return the saved project.
+     * @return - {@link ProjectDto} details.
      */
-    Project retrieveProjectById(Long id);
+    ProjectDto retrieveProjectById(Long id);
 
     /**
-     * update Project entity.
+     * This method is responsible for update project entity.
      *
-     * @param project - project details.
-     * @return the updated project.
+     * @param projectDto - {@link ProjectDto} details.
+     * @return - updated {@link ProjectDto} details.
      */
-    Project updateProject(Project project);
+    ProjectDto updateProject(ProjectDto projectDto);
 
     /**
-     * delete Project entity.
+     * This method is responsible for delete project entity.
      *
-     * @param project - project details.
+     * @param id - employee id.
      */
-    void deleteProject(Project project);
+    void deleteProject(Long id);
 
 }

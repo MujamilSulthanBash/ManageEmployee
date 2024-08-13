@@ -3,56 +3,83 @@ package com.i2i.ems.employee.service;
 import java.util.List;
 
 import com.i2i.ems.employee.dto.EmployeeDto;
-import com.i2i.ems.model.Employee;
 
 /**
  * Service interface for Employee entity.
  * Defines methods for CRUD operations and additional business logic.
  */
 public interface EmployeeService {
+
     /**
-     * Save Employee entity.
+     * This method is responsible for Save Employee entity.
      *
-     * @param employeeDto - employee details.
-     * @return the saved employee.
+     * @param employeeDto - {@link EmployeeDto}
+     * @return EmployeeDto - saved {@link EmployeeDto} details.
      */
     EmployeeDto saveEmployee(EmployeeDto employeeDto);
 
     /**
-     * retrieve set of Employees.
+     * This method is responsible for retrieve List of Employees.
      *
-     * @return list of employees.
+     * @return List<EmployeeDto> - {@link EmployeeDto} details
      */
     List<EmployeeDto> retrieveEmployees();
 
     /**
-     * retrieve Employee By id.
+     * This method is responsible for retrieve Employee By id.
      *
      * @param id - employee id.
-     * @return the saved employee.
+     * @return - {@link EmployeeDto} details.
      */
     EmployeeDto retrieveEmployeeById(Long id);
 
     /**
-     * update Employee entity.
+     * This method is responsible for update Employee entity.
      *
-     * @param employeeDto - employee details.
-     * @return the updated employee.
+     * @param employeeDto - {@link EmployeeDto} details.
+     * @return - updated {@link EmployeeDto} details.
      */
     EmployeeDto updateEmployee(EmployeeDto employeeDto);
 
     /**
-     * delete Employee entity.
+     * This method is responsible for delete Employee entity.
      *
-     * @param id - employee details.
+     * @param id - employee id.
      */
     void deleteEmployee(Long id);
 
+    /**
+     * This method is responsible for assign department for employee
+     *
+     * @param employeeId   - employeeId.
+     * @param departmentId - departmentId.
+     * @return EmployeeDto - {@link EmployeeDto} details.
+     */
     EmployeeDto assignDepartment(Long employeeId, Long departmentId);
 
+    /**
+     * This method is responsible for assign project for employee
+     *
+     * @param employeeId   - employeeId.
+     * @param projectId - projectId.
+     * @return EmployeeDto - {@link EmployeeDto} details.
+     */
     EmployeeDto assignProject(Long employeeId, Long projectId);
 
+    /**
+     * This method is responsible for get employees based on department.
+     *
+     * @param id - departmentId.
+     * @return List<EmployeeDto> - {@link EmployeeDto} details.
+     */
     List<EmployeeDto> getEmployeeByDepartment(Long id);
 
+    /**
+     * This method is responsible for get employees based on project.
+     *
+     * @param id - projectId.
+     * @return List<EmployeeDto> - {@link EmployeeDto} details.
+     */
     List<EmployeeDto> getEmployeeByProject(Long id);
+
 }

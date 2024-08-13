@@ -1,12 +1,11 @@
 package com.i2i.ems.laptop.repository;
 
-import com.i2i.ems.model.Laptop;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import com.i2i.ems.model.Laptop;
 
 /**
  * Repository interface for Laptop entity.
@@ -14,19 +13,19 @@ import java.util.Optional;
  */
 @Repository
 public interface LaptopRepository extends JpaRepository<Laptop, Long>{
-    /**
-     * custom Query for fetch all Laptop where isDelete is false
-     *
-     * @return List<Laptop> - laptop details
-     */
-    @Query("from Laptop where isDelete = false")
-    List<Laptop> findAllLaptop();
 
     /**
-     * custom Query for fetch Laptop By id where isDelete is fasle
+     * This method is responsible for fetch all Laptop where isDelete is false
      *
-     * @return Optional<Laptop> - May or May not return Laptop details
+     * @return List<Laptop> - {@link Laptop} details
      */
-    @Query("from Laptop where id = ?1 and isDelete = false")
-    Optional<Laptop> findLaptopById(Long id);
+    List<Laptop> findByIsDeleteFalse();
+
+    /**
+     * This method is responsible for fetch Laptop By id where isDelete is false
+     *
+     * @return Laptop - {@link Laptop} details
+     */
+    Laptop findLaptopByIdAndIsDeleteFalse(Long id);
+
 }

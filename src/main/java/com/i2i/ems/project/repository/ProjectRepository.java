@@ -1,11 +1,11 @@
 package com.i2i.ems.project.repository;
 
-import com.i2i.ems.model.Project;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.i2i.ems.model.Project;
 
 /**
  * Repository interface for Project entity.
@@ -13,19 +13,19 @@ import java.util.List;
  */
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    /**
-     * custom Query for fetch all Project where isDelete is false
-     *
-     * @return List<Project> - Project details
-     */
-    @Query("from Project where isDelete = false")
-    List<Project> findAllProject();
 
     /**
-     * custom Query for fetch Project By id where isDelete is false
+     * This method is responsible for fetch all Project where isDelete is false
      *
-     * @return Optional<Project> - May or May not return Project details
+     * @return List<Project> - {@link Project} details
      */
-    @Query("from Project where id = ?1 and isDelete = false")
-    Project findProjectById(Long id);
+    List<Project> findByIsDeleteFalse();
+
+    /**
+     * This method is responsible for fetch Project By id where isDelete is false
+     *
+     * @return Project - {@link Project} details
+     */
+    Project findProjectByIdAndIsDeleteFalse(Long id);
+
 }

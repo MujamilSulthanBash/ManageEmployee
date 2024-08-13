@@ -1,16 +1,21 @@
 package com.i2i.ems.laptop.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+
 import com.i2i.ems.laptop.dto.LaptopDto;
-import com.i2i.ems.laptop.mapper.LaptopMapper;
 import com.i2i.ems.laptop.service.LaptopService;
-import com.i2i.ems.model.Laptop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("ems/api/v1/laptops")
@@ -21,50 +26,37 @@ public class LaptopController {
 
     @PostMapping
     public ResponseEntity<LaptopDto> createEmployee(@RequestBody LaptopDto laptopDto) {
-        return new ResponseEntity(
-                LaptopMapper.mapLaptopDto(
-                        laptopService.saveLaptop(
-                                LaptopMapper.mapLaptop(
-                                        laptopDto
-                                )
-                        )
-                ), HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                laptopService.saveLaptop(laptopDto),
+                HttpStatus.CREATED
+        );
     }
 
     @GetMapping
     public ResponseEntity<List<LaptopDto>> getLaptops() {
-        List<LaptopDto> laptopDtos = new ArrayList<>();
-        List<Laptop> laptops = laptopService.retrieveLaptops();
-        for (Laptop laptop : laptops) {
-            laptopDtos.add(LaptopMapper.mapLaptopDto(laptop));
-        }
-        return new ResponseEntity(laptopDtos, HttpStatus.OK);
+        List<LaptopDto> laptopsDto = laptopService.retrieveLaptops();
+        return new ResponseEntity<>(laptopsDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<LaptopDto> getLaptopById(@PathVariable Long id) {
-        return new ResponseEntity(
-                LaptopMapper.mapLaptopDto(
-                        laptopService.retrieveLaptopById(id)
-                ), HttpStatus.OK);
+        return new ResponseEntity<>(
+                laptopService.retrieveLaptopById(id),
+                HttpStatus.OK
+        );
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<LaptopDto> updateLaptop(@PathVariable Long id, @RequestBody LaptopDto updateLaptopDto) {
-        Laptop laptop = laptopService.retrieveLaptopById(id);
-        Laptop updatedLaptop = LaptopMapper.mapLaptop(updateLaptopDto);
-        updatedLaptop.setId(laptop.getId());
-        return new ResponseEntity(
-                LaptopMapper.mapLaptopDto(
-                        laptopService.updateLaptop(
-                                updatedLaptop)
-                ), HttpStatus.OK);
+    @PutMapping()
+    public ResponseEntity<LaptopDto> updateLaptop(@RequestBody LaptopDto updateLaptopDto) {
+        return new ResponseEntity<>(
+                laptopService.updateLaptop(updateLaptopDto),
+                HttpStatus.OK
+        );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLaptop(@PathVariable Long id) {
-        Laptop laptop = laptopService.retrieveLaptopById(id);
-        laptopService.deleteLaptop(laptop);
-        return new ResponseEntity(HttpStatus.OK);
+        laptopService.deleteLaptop(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

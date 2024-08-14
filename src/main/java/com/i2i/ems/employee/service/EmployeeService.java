@@ -3,6 +3,8 @@ package com.i2i.ems.employee.service;
 import java.util.List;
 
 import com.i2i.ems.employee.dto.EmployeeDto;
+import com.i2i.ems.model.Department;
+import com.i2i.ems.model.Project;
 
 /**
  * Service interface for Employee entity.
@@ -65,21 +67,5 @@ public interface EmployeeService {
      * @return EmployeeDto - {@link EmployeeDto} details.
      */
     EmployeeDto assignProject(Long employeeId, Long projectId);
-
-    /**
-     * This method is responsible for get employees based on department.
-     *
-     * @param id - departmentId.
-     * @return List<EmployeeDto> - {@link EmployeeDto} details.
-     */
-    List<EmployeeDto> getEmployeeByDepartment(Long id);
-
-    /**
-     * This method is responsible for get employees based on project.
-     *
-     * @param id - projectId.
-     * @return List<EmployeeDto> - {@link EmployeeDto} details.
-     */
-    List<EmployeeDto> getEmployeeByProject(Long id);
 
 }

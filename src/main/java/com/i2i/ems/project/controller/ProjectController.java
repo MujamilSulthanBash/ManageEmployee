@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.i2i.ems.employee.dto.EmployeeDto;
 import com.i2i.ems.project.dto.ProjectDto;
 import com.i2i.ems.project.service.ProjectService;
 
@@ -57,6 +58,12 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/{id}/employees")
+    public ResponseEntity<List<EmployeeDto>> getEmployeeByProject(@PathVariable Long id) {
+        return new ResponseEntity<>(projectService.retrieveEmployeeByProject(id), HttpStatus.OK);
+    }
+
 }

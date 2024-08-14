@@ -2,7 +2,7 @@ package com.i2i.ems.employee.mapper;
 
 import com.i2i.ems.employee.dto.EmployeeDto;
 import com.i2i.ems.model.Employee;
-import com.i2i.ems.utility.AgeCalculator;
+import com.i2i.ems.utility.YearIntervalCalculator;
 import com.i2i.ems.utility.GetListOfProject;
 import com.i2i.ems.utility.HideDetail;
 
@@ -15,7 +15,7 @@ public class EmployeeMapper {
                 .name(employee.getName())
                 .phoneNumber(HideDetail.showDetails(employee.getPhoneNumber()))
                 .email(HideDetail.showDetails(employee.getEmail()))
-                .age(AgeCalculator.calculateAge(employee.getDateOfBirth()))
+                .age(YearIntervalCalculator.calculateAge(employee.getDateOfBirth()))
                 .departmentName(employee.getDepartment() == null ?
                         "Not Assigned" : employee.getDepartment().getName())
                 .build();
@@ -27,10 +27,10 @@ public class EmployeeMapper {
                 .name(employee.getName())
                 .phoneNumber(HideDetail.showDetails(employee.getPhoneNumber()))
                 .email(HideDetail.showDetails(employee.getEmail()))
-                .age(AgeCalculator.calculateAge(employee.getDateOfBirth()))
+                .age(YearIntervalCalculator.calculateAge(employee.getDateOfBirth()))
                 .departmentName(employee.getDepartment() == null ?
                         "Not Assigned" : employee.getDepartment().getName())
-                .projectName(GetListOfProject.displayProjects(employee.getProjects()).isEmpty() ?
+                .projectName(employee.getProjects() == null ?
                         "Not Assigned" : GetListOfProject.displayProjects(employee.getProjects()))
                 .build();
     }

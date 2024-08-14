@@ -3,6 +3,9 @@ package com.i2i.ems.project.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.i2i.ems.employee.dto.EmployeeDto;
+import com.i2i.ems.employee.mapper.EmployeeMapper;
+import com.i2i.ems.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +52,16 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findProjectByIdAndIsDeleteFalse(id);
         project.setDelete(true);
         projectRepository.save(project);
+    }
+
+    @Override
+    public List<EmployeeDto> retrieveEmployeeByProject(Long id) {
+        Project project = projectRepository.findProjectByIdAndIsDeleteFalse(id);
+        List<EmployeeDto> employeesDto = new ArrayList<>();
+        for(Employee employee : project.getEmployees()) {
+            employeesDto.add(EmployeeMapper.mapEmployeeDtoForProject(employee));
+        }
+        return employeesDto;
     }
 
 }

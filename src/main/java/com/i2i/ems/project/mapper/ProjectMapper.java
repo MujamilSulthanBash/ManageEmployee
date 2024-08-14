@@ -5,7 +5,7 @@ import com.i2i.ems.project.dto.ProjectDto;
 
 public class ProjectMapper {
     public static ProjectDto mapProjectDto(Project project) {
-        return (ProjectDto) ProjectDto.builder()
+        return ProjectDto.builder()
                 .id(project.getId())
                 .name(project.getName())
                 .duration(project.getDuration())

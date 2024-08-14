@@ -2,6 +2,7 @@ package com.i2i.ems.project.service;
 
 import java.util.List;
 
+import com.i2i.ems.employee.dto.EmployeeDto;
 import com.i2i.ems.project.dto.ProjectDto;
 
 /**
@@ -48,4 +49,5 @@ public interface ProjectService {
      */
     void deleteProject(Long id);
 
+    List<EmployeeDto> retrieveEmployeeByProject(Long id);
 }

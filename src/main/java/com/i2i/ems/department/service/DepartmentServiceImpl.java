@@ -3,6 +3,9 @@ package com.i2i.ems.department.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.i2i.ems.employee.dto.EmployeeDto;
+import com.i2i.ems.employee.mapper.EmployeeMapper;
+import com.i2i.ems.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,5 +53,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findDepartmentByIdAndIsDeleteFalse(id);
         department.setDelete(true);
         departmentRepository.save(department);
+    }
+
+    @Override
+    public List<EmployeeDto> retrieveEmployeeByDepartment(Long id) {
+        Department department = departmentRepository.findDepartmentByIdAndIsDeleteFalse(id);
+        List<EmployeeDto> employeesDto = new ArrayList<>();
+        for(Employee employee : department.getEmployees()) {
+            employeesDto.add(EmployeeMapper.mapEmployeeDto(employee));
+        }
+        return employeesDto;
     }
 }

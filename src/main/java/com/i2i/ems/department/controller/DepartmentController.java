@@ -2,6 +2,7 @@ package com.i2i.ems.department.controller;
 
 import java.util.List;
 
+import com.i2i.ems.employee.dto.EmployeeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +56,11 @@ public class DepartmentController {
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/employeebydepartment/{id}")
+    public ResponseEntity<List<EmployeeDto>> getEmployeeByDepartment(@PathVariable Long id) {
+        return new ResponseEntity<>(departmentService.retrieveEmployeeByDepartment(id), HttpStatus.OK);
     }
 
 }

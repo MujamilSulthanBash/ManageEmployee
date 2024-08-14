@@ -3,6 +3,7 @@ package com.i2i.ems.department.service;
 import java.util.List;
 
 import com.i2i.ems.department.dto.DepartmentDto;
+import com.i2i.ems.employee.dto.EmployeeDto;
 import com.i2i.ems.model.Department;
 
 /**
@@ -48,4 +49,6 @@ public interface DepartmentService {
      * @param id - department id.
      */
     void deleteDepartment(Long id);
+
+    List<EmployeeDto> retrieveEmployeeByDepartment(Long id);
 }

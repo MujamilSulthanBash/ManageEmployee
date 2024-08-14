@@ -62,14 +62,4 @@ public class EmployeeController {
         );
     }
 
-    @GetMapping("department/{id}")
-    public ResponseEntity<List<EmployeeDto>> getEmployeeByDepartment(Long id){
-        return new ResponseEntity<List<EmployeeDto>>(employeeService.getEmployeeByDepartment(id), HttpStatus.OK);
-    }
-
-    @GetMapping("project/{id}")
-    public ResponseEntity<List<EmployeeDto>> getEmployeeByProject(Long id){
-        return new ResponseEntity<List<EmployeeDto>>(employeeService.getEmployeeByProject(id), HttpStatus.OK);
-    }
-
 }

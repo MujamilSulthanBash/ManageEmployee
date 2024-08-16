@@ -49,5 +49,10 @@ public interface ProjectService {
      */
     void deleteProject(Long id);
 
+    /**
+     * This method is responsible for retrieve employees by particular project entity.
+     *
+     * @param id - project id.
+     */
     List<EmployeeDto> retrieveEmployeeByProject(Long id);
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.i2i.ems.department.dto.DepartmentDto;
 import com.i2i.ems.employee.dto.EmployeeDto;
-import com.i2i.ems.model.Department;
 
 /**
  * Service interface for Department entity.
@@ -50,5 +49,11 @@ public interface DepartmentService {
      */
     void deleteDepartment(Long id);
 
+    /**
+     * This method is responsible for retrieve employees based on particular Department .
+     *
+     * @param id - department id.
+     * @return List<EmployeeDto> - {@link EmployeeDto} details.
+     */
     List<EmployeeDto> retrieveEmployeeByDepartment(Long id);
 }

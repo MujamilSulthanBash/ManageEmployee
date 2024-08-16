@@ -3,8 +3,6 @@ package com.i2i.ems.employee.service;
 import java.util.List;
 
 import com.i2i.ems.employee.dto.EmployeeDto;
-import com.i2i.ems.model.Department;
-import com.i2i.ems.model.Project;
 
 /**
  * Service interface for Employee entity.

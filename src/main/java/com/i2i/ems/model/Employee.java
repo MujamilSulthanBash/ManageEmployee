@@ -55,5 +55,6 @@ public class Employee {
     @JoinColumn(name = "department_id")
     private Department department;
     @ManyToMany
+    @Column(unique = true)
     private List<Project> projects;
 }

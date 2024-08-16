@@ -32,10 +32,13 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, unique = true)
     private String name;
+    @Column(nullable = false)
     private int duration;
     @Column(name = "is_delete")
     private boolean isDelete;
     @ManyToMany(mappedBy = "projects")
+    @Column(unique = true)
     private List<Employee> employees;
 }

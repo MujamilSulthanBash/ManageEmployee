@@ -1,13 +1,13 @@
 package com.i2i.ems.employee.repository;
 
-import com.i2i.ems.model.Department;
-import com.i2i.ems.model.Employee;
-import com.i2i.ems.model.Project;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.i2i.ems.model.Department;
+import com.i2i.ems.model.Employee;
+import com.i2i.ems.model.Project;
 
 /**
  * Repository interface for Employee entity.
@@ -31,8 +31,18 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
      */
     Employee findEmployeeByIdAndIsDeleteFalse(Long id);
 
+    /**
+     * This method is responsible for fetch Department By id where isDelete is true
+     *
+     * @return Department - {@link Department} details
+     */
     Department findDepartmentByIdAndIsDeleteFalse(Long id);
 
+    /**
+     * This method is responsible for fetch Project By id where isDelete is false
+     *
+     * @return Project - {@link Project} details
+     */
     Project findProjectByIdAndIsDeleteFalse(Long id);
 
 }

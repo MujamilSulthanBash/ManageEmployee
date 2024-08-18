@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.i2i.ems.model.Department;
 import com.i2i.ems.model.Employee;
-import com.i2i.ems.model.Project;
 
 /**
  * Repository interface for Employee entity.
@@ -32,17 +30,19 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Employee findEmployeeByIdAndIsDeleteFalse(Long id);
 
     /**
-     * This method is responsible for fetch Department By id where isDelete is true
+     * This method is responsible for check Employee By name where the name is already there or not.
      *
-     * @return Department - {@link Department} details
+     * @param name - name of the Employee.
+     * @return boolean - return true if the name exist or else return false.
      */
-    Department findDepartmentByIdAndIsDeleteFalse(Long id);
+    boolean existsByName(String name);
 
     /**
-     * This method is responsible for fetch Project By id where isDelete is false
+     * This method is responsible for check Employee By phoneNumber where the phoneNumber is already there or not.
      *
-     * @return Project - {@link Project} details
+     * @param phoneNumber - phoneNumber of the Employee.
+     * @return boolean - return true if the phoneNumber exist or else return false.
      */
-    Project findProjectByIdAndIsDeleteFalse(Long id);
+    boolean existsByPhoneNumber(String phoneNumber);
 
 }

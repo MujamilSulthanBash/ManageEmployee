@@ -3,6 +3,7 @@ package com.i2i.ems.project.service;
 import java.util.List;
 
 import com.i2i.ems.employee.dto.EmployeeDto;
+import com.i2i.ems.model.Project;
 import com.i2i.ems.project.dto.ProjectDto;
 
 /**
@@ -35,6 +36,14 @@ public interface ProjectService {
     ProjectDto retrieveProjectById(Long id);
 
     /**
+     * This method is responsible for retrieve project By id.
+     *
+     * @param id - project id.
+     * @return - {@link Project} details.
+     */
+    Project readProjectById(Long id);
+
+    /**
      * This method is responsible for update project entity.
      *
      * @param projectDto - {@link ProjectDto} details.
@@ -46,8 +55,9 @@ public interface ProjectService {
      * This method is responsible for delete project entity.
      *
      * @param id - employee id.
+     * @return true if successfully deleted.
      */
-    void deleteProject(Long id);
+    boolean deleteProject(Long id);
 
     /**
      * This method is responsible for retrieve employees by particular project entity.
@@ -55,4 +65,5 @@ public interface ProjectService {
      * @param id - project id.
      */
     List<EmployeeDto> retrieveEmployeeByProject(Long id);
+
 }

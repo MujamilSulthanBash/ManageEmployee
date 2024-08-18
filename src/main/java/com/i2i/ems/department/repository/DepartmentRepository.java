@@ -28,4 +28,12 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
      */
     Department findDepartmentByIdAndIsDeleteFalse(Long id);
 
+    /**
+     * This method is responsible for check Department By name where the name is already there or not.
+     *
+     * @param name - name of the department.
+     * @return boolean - return true if the name exist or else return false.
+     */
+    boolean existsByName(String name);
+
 }

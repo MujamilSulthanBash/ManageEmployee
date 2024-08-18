@@ -22,12 +22,12 @@ public class LaptopMapper {
      * @param laptop {@link Laptop} The Employee entity to be converted.
      * @return {@link LaptopDto} The corresponding Employee DTO.
      */
-    public static LaptopDto mapLaptopDto(Laptop laptop) {
+    public LaptopDto mapLaptopDto(Laptop laptop) {
         return LaptopDto.builder()
                 .id(laptop.getId())
                 .name(laptop.getName())
                 .ram(laptop.getRam())
-                .ram(laptop.getRom())
+                .rom(laptop.getRom())
                 .build();
     }
 
@@ -38,7 +38,7 @@ public class LaptopMapper {
      * @param laptopDto {@link LaptopDto} The Employee DTO to be converted.
      * @return {@link Laptop} The corresponding Employee entity.
      */
-    public static Laptop mapLaptop(LaptopDto laptopDto) {
+    public Laptop mapLaptop(LaptopDto laptopDto) {
         return Laptop.builder()
                 .name(laptopDto.getName())
                 .ram(laptopDto.getRam())

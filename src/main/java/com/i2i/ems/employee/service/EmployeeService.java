@@ -46,7 +46,7 @@ public interface EmployeeService {
      *
      * @param id - employee id.
      */
-    void deleteEmployee(Long id);
+    boolean deleteEmployee(Long id);
 
     /**
      * This method is responsible for assign department for employee

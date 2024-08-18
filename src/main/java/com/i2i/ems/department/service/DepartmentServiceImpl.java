@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,18 +23,24 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    private static final Logger logger = LogManager.getLogger(DepartmentServiceImpl.class);
+    @Autowired
+    private DepartmentMapper departmentMapper;
+
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
+    @Autowired
+    private static Logger logger;
 
     @Override
     public DepartmentDto saveDepartment(DepartmentDto departmentDto) {
-        try {
-            Department department = DepartmentMapper.mapDepartment(departmentDto);
-            logger.info("Department created with name {}", department.getName());
-            return DepartmentMapper.mapDepartmentDto(departmentRepository.save(department));
-        } catch (Exception e) {
+        if (departmentRepository.existsByName(departmentDto.getName())) {
             logger.warn("Department name {} Already present ", departmentDto.getName());
-            throw new DuplicateKeyException("Department name " +departmentDto.getName() + " Already present ");
+            throw new DuplicateKeyException("Department name " + departmentDto.getName() + " Already present ");
         }
+        Department department = departmentMapper.mapDepartment(departmentDto);
+        logger.info("Department created with name {}", department.getName());
+        return departmentMapper.mapDepartmentDto(departmentRepository.save(department));
     }
 
     @Override
@@ -45,10 +50,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departments.isEmpty()) {
             logger.warn("No Active Department in DataBase");
             throw new NoSuchElementException("No Active Department in DataBase");
-        } else {
-            for (Department department : departments) {
-                departmentsDto.add(DepartmentMapper.mapDepartmentDto(department));
-            }
+        }
+        for (Department department : departments) {
+            departmentsDto.add(departmentMapper.mapDepartmentDto(department));
         }
         return departmentsDto;
     }
@@ -60,7 +64,17 @@ public class DepartmentServiceImpl implements DepartmentService {
             logger.warn("while retrieving there is no Such Department id : {}", id);
             throw new NoSuchElementException("No Such Department id : " + id);
         }
-        return DepartmentMapper.mapDepartmentDto(department);
+        return departmentMapper.mapDepartmentDto(department);
+    }
+
+    @Override
+    public Department readDepartmentById(Long id) {
+        Department department = departmentRepository.findDepartmentByIdAndIsDeleteFalse(id);
+        if (department == null) {
+            logger.warn("while readDepartmentById there is no Such Department id : {}", id);
+            throw new NoSuchElementException("No Such Department id : " + id);
+        }
+        return department;
     }
 
     @Override
@@ -69,24 +83,23 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentCheck == null) {
             logger.info("No Such Department id : {}", departmentDto.getId());
             throw new NoSuchElementException("No Such Department id : " + departmentDto.getId());
-        } else {
-            Department department = DepartmentMapper.mapDepartment(departmentDto);
-            logger.info("Department updated with name {}", department.getName());
-            return DepartmentMapper.mapDepartmentDto(departmentRepository.save(department));
         }
+        Department department = departmentMapper.mapDepartment(departmentDto);
+        logger.info("Department updated with name {}", department.getName());
+        return departmentMapper.mapDepartmentDto(departmentRepository.save(department));
     }
 
     @Override
-    public void deleteDepartment(Long id) {
+    public boolean deleteDepartment(Long id) {
         Department department = departmentRepository.findDepartmentByIdAndIsDeleteFalse(id);
         if (department == null) {
             logger.info("While deleting there is no Such Department id : {}", id);
             throw new NoSuchElementException("No Such Department id : " + id);
-        } else {
-            department.setDelete(true);
-            logger.info("Department deleted with name {}", department.getName());
-            departmentRepository.save(department);
         }
+        department.setDelete(true);
+        logger.info("Department deleted with name {}", department.getName());
+        departmentRepository.save(department);
+        return true;
     }
 
     @Override
@@ -94,17 +107,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findDepartmentByIdAndIsDeleteFalse(id);
         List<EmployeeDto> employeesDto = new ArrayList<>();
         if (department == null) {
-            logger.info("No such id {}", id);
+            logger.info("No such Department id {}", id);
             throw new NoSuchElementException("No Such Department id " + id);
-        } else {
-            if(department.getEmployees().isEmpty()) {
-                logger.info("No Employee in {}", department.getName());
-                throw new NoSuchElementException("No Employee in " + department.getName());
-            } else {
-                for (Employee employee : department.getEmployees()) {
-                    employeesDto.add(EmployeeMapper.mapEmployeeDto(employee));
-                }
-            }
+        }
+        if(department.getEmployees().isEmpty()) {
+            logger.info("No Employees in {}", department.getName());
+            throw new NoSuchElementException("No Employees in " + department.getName());
+        }
+        for (Employee employee : department.getEmployees()) {
+            employeesDto.add(employeeMapper.mapEmployeeDto(employee));
         }
         return employeesDto;
     }

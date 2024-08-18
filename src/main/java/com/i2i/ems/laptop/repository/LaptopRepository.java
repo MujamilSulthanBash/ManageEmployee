@@ -28,4 +28,12 @@ public interface LaptopRepository extends JpaRepository<Laptop, Long>{
      */
     Laptop findLaptopByIdAndIsDeleteFalse(Long id);
 
+    /**
+     * This method is responsible for check laptop By name where the name is already there or not.
+     *
+     * @param name - name of the laptop.
+     * @return boolean - return true if the name exist or else return false.
+     */
+    boolean existsByName(String name);
+
 }

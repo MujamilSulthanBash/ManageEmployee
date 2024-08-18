@@ -45,7 +45,8 @@ public interface LaptopService {
      * This method is responsible for delete Employee entity.
      *
      * @param id - laptopId.
+     * @return true if successfully deleted.
      */
-    void deleteLaptop(Long id);
+    boolean deleteLaptop(Long id);
 
 }

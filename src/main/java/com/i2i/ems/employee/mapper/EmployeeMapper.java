@@ -25,7 +25,7 @@ public class EmployeeMapper {
      * @param employee {@link Employee} The Employee entity to be converted.
      * @return {@link EmployeeDto} The corresponding Employee DTO.
      */
-    public static EmployeeDto mapEmployeeDto(Employee employee)
+    public EmployeeDto mapEmployeeDto(Employee employee)
     {
         return EmployeeDto.builder()
                 .id(employee.getId())
@@ -45,7 +45,7 @@ public class EmployeeMapper {
      * @param employee {@link Employee} The Employee entity to be converted.
      * @return {@link EmployeeDto} The corresponding Employee DTO.
      */
-    public static EmployeeDto mapEmployeeDtoForProject(Employee employee) {
+    public EmployeeDto mapEmployeeDtoForProject(Employee employee) {
         return EmployeeDto.builder()
                 .id(employee.getId())
                 .name(employee.getName())
@@ -65,7 +65,7 @@ public class EmployeeMapper {
      * @param employeeDto {@link EmployeeDto} The Employee DTO to be converted.
      * @return {@link Employee} The corresponding Employee entity.
      */
-    public static Employee mapEmployee(EmployeeDto employeeDto) {
+    public Employee mapEmployee(EmployeeDto employeeDto) {
         return Employee.builder()
                 .id(employeeDto.getId())
                 .name(employeeDto.getName())

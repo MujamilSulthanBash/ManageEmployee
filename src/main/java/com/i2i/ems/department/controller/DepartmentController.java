@@ -90,9 +90,9 @@ public class DepartmentController {
      * @return HTTP status 200 OK.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
-        departmentService.deleteDepartment(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> deleteDepartment(@PathVariable Long id) {
+        boolean deleteDepartment = departmentService.deleteDepartment(id);
+        return new ResponseEntity<>(deleteDepartment, HttpStatus.OK);
     }
 
     /**

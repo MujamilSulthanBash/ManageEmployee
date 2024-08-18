@@ -91,9 +91,9 @@ public class ProjectController {
      * @return HTTP status 200 OK.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
-        projectService.deleteProject(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> deleteProject(@PathVariable Long id) {
+        boolean deleteProject = projectService.deleteProject(id);
+        return new ResponseEntity<>(deleteProject, HttpStatus.OK);
     }
 
     /**

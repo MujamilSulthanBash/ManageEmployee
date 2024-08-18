@@ -22,7 +22,7 @@ public class ProjectMapper {
      * @param project {@link Project} The Employee entity to be converted.
      * @return {@link ProjectDto} The corresponding Employee DTO.
      */
-    public static ProjectDto mapProjectDto(Project project) {
+    public ProjectDto mapProjectDto(Project project) {
         return ProjectDto.builder()
                 .id(project.getId())
                 .name(project.getName())
@@ -37,7 +37,7 @@ public class ProjectMapper {
      * @param projectDto {@link ProjectDto} The Employee DTO to be converted.
      * @return {@link Project} The corresponding Employee entity.
      */
-    public static Project mapProject(ProjectDto projectDto) {
+    public Project mapProject(ProjectDto projectDto) {
         return Project.builder()
                 .name(projectDto.getName())
                 .duration(projectDto.getDuration())

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,20 +17,24 @@ import com.i2i.ems.model.Laptop;
 @Service
 public class LaptopServiceImpl implements LaptopService {
 
-    private static final Logger logger = LogManager.getLogger(LaptopServiceImpl.class);
+    @Autowired
+    private static Logger logger;
 
     @Autowired
     private LaptopRepository laptopRepository;
 
+    @Autowired
+    private LaptopMapper laptopMapper;
+
     @Override
     public LaptopDto saveLaptop(LaptopDto laptopDto) {
-        try {
-            Laptop laptop = LaptopMapper.mapLaptop(laptopDto);
-            return LaptopMapper.mapLaptopDto(laptopRepository.save(laptop));
-        } catch (Exception e) {
+        if (laptopRepository.existsByName(laptopDto.getName())) {
             logger.warn("Laptop name {} Already present ", laptopDto.getName());
             throw new DuplicateKeyException("Laptop name " + laptopDto.getName() + " Already present ");
         }
+        Laptop laptop = laptopMapper.mapLaptop(laptopDto);
+        logger.info("Laptop created with name {}", laptop.getName());
+        return laptopMapper.mapLaptopDto(laptopRepository.save(laptop));
     }
 
     @Override
@@ -41,10 +44,9 @@ public class LaptopServiceImpl implements LaptopService {
         if (laptops.isEmpty()) {
             logger.warn("No Active Laptop in DataBase");
             throw new NoSuchElementException("No Active Laptop in DataBase");
-        } else {
-            for (Laptop laptop : laptops) {
-                laptopsDto.add(LaptopMapper.mapLaptopDto(laptop));
-            }
+        }
+        for (Laptop laptop : laptops) {
+            laptopsDto.add(laptopMapper.mapLaptopDto(laptop));
         }
         return laptopsDto;
     }
@@ -55,9 +57,8 @@ public class LaptopServiceImpl implements LaptopService {
         if (laptop == null) {
             logger.warn("While retrieving laptop there is no Such Laptop id : {}", id);
             throw new NoSuchElementException("No Such Laptop id : " + id);
-        } else {
-            return LaptopMapper.mapLaptopDto(laptop);
         }
+        return laptopMapper.mapLaptopDto(laptop);
     }
 
     @Override
@@ -66,24 +67,23 @@ public class LaptopServiceImpl implements LaptopService {
         if (findLaptop == null) {
             logger.warn("While updating there is no Such Laptop id : {}", laptopDto.getId());
             throw new NoSuchElementException("No Such Laptop id : " + laptopDto.getId());
-        } else {
-            Laptop laptop = LaptopMapper.mapLaptop(laptopDto);
-            logger.info("Employee updated with name {}", laptop.getName());
-            return LaptopMapper.mapLaptopDto(laptopRepository.save(laptop));
         }
+        Laptop laptop = laptopMapper.mapLaptop(laptopDto);
+        logger.info("Laptop updated with name {}", laptop.getName());
+        return laptopMapper.mapLaptopDto(laptopRepository.save(laptop));
     }
 
     @Override
-    public void deleteLaptop(Long id) {
+    public boolean deleteLaptop(Long id) {
         Laptop laptop = laptopRepository.findLaptopByIdAndIsDeleteFalse(id);
         if (laptop == null) {
             logger.warn("While deleting there is no Such Laptop id : {}", id);
             throw new NoSuchElementException("No Such Laptop id : " + id);
-        } else {
-            laptop.setDelete(true);
-            logger.info("Employee deleted with name {}", laptop.getName());
-            laptopRepository.save(laptop);
         }
+        laptop.setDelete(true);
+        logger.info("Laptop deleted with name {}", laptop.getName());
+        laptopRepository.save(laptop);
+        return true;
     }
 
 }

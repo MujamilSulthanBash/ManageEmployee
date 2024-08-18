@@ -26,15 +26,21 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    ProjectMapper projectMapper;
+
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
     @Override
     public ProjectDto saveProject(ProjectDto projectDto) {
         if (projectRepository.existsByName(projectDto.getName())) {
             logger.warn("Project name {} Already present ", projectDto.getName());
             throw new DuplicateKeyException("Project name " + projectDto.getName() + " Already present ");
         }
-        Project project = ProjectMapper.mapProject(projectDto);
+        Project project = projectMapper.mapProject(projectDto);
         logger.info("Project created with name {}", project.getName());
-        return ProjectMapper.mapProjectDto(projectRepository.save(project));
+        return projectMapper.mapProjectDto(projectRepository.save(project));
     }
 
     @Override
@@ -44,10 +50,9 @@ public class ProjectServiceImpl implements ProjectService {
         if (projects.isEmpty()) {
             logger.info("No Active Project in DataBase");
             throw new NoSuchElementException("No Active Project in DataBase");
-        } else {
-            for (Project project : projects) {
-                projectsDto.add(ProjectMapper.mapProjectDto(project));
-            }
+        }
+        for (Project project : projects) {
+            projectsDto.add(projectMapper.mapProjectDto(project));
         }
         return projectsDto;
     }
@@ -56,11 +61,20 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto retrieveProjectById(Long id) {
         Project project = projectRepository.findProjectByIdAndIsDeleteFalse(id);
         if (project == null) {
+            logger.info("While retrieving No Such Project id : {}", id);
+            throw new NoSuchElementException("No Such Project id : " + id);
+        }
+        return projectMapper.mapProjectDto(project);
+    }
+
+    @Override
+    public Project readProjectById(Long id) {
+        Project project = projectRepository.findProjectByIdAndIsDeleteFalse(id);
+        if (project == null) {
             logger.info("No Such Project id : {}", id);
             throw new NoSuchElementException("No Such Project id : " + id);
-        } else {
-            return ProjectMapper.mapProjectDto(project);
         }
+        return project;
     }
 
     @Override
@@ -69,15 +83,14 @@ public class ProjectServiceImpl implements ProjectService {
         if (projectCheck == null) {
             logger.info("While updating there is No Such Project id : {}", projectDto.getId());
             throw new NoSuchElementException("No Such Project id : " + projectDto.getId());
-        } else {
-            Project project = ProjectMapper.mapProject(projectDto);
-            logger.info("Project updated with id {}", project.getName());
-            return ProjectMapper.mapProjectDto(projectRepository.save(project));
         }
+        Project project = projectMapper.mapProject(projectDto);
+        logger.info("Project updated with id {}", project.getName());
+        return projectMapper.mapProjectDto(projectRepository.save(project));
     }
 
     @Override
-    public void deleteProject(Long id) {
+    public boolean deleteProject(Long id) {
         Project project = projectRepository.findProjectByIdAndIsDeleteFalse(id);
         if (project == null) {
             logger.info("While deleting there is No Such Project id : {}", id);
@@ -86,6 +99,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setDelete(true);
         logger.info("Project deleted with id {}", project.getName());
         projectRepository.save(project);
+        return true;
     }
 
     @Override
@@ -95,15 +109,13 @@ public class ProjectServiceImpl implements ProjectService {
         if(project == null) {
             logger.info("No such project id {}", id);
             throw new NoSuchElementException("No such project id " + id);
-        } else {
-            if (project.getEmployees().isEmpty()) {
-                logger.info("No Employees in project {}", project.getName());
-                throw new NoSuchElementException("No Employees in project" + project.getName());
-            } else {
-                for (Employee employee : project.getEmployees()) {
-                    employeesDto.add(EmployeeMapper.mapEmployeeDto(employee));
-                }
-            }
+        }
+        if (project.getEmployees().isEmpty()) {
+            logger.info("No Employees in project {}", project.getName());
+            throw new NoSuchElementException("No Employees in project" + project.getName());
+        }
+        for (Employee employee : project.getEmployees()) {
+            employeesDto.add(employeeMapper.mapEmployeeDto(employee));
         }
         return employeesDto;
     }

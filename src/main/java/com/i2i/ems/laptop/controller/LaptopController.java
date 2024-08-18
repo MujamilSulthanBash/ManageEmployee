@@ -89,8 +89,9 @@ public class LaptopController {
      * @return HTTP status 200 OK.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLaptop(@PathVariable Long id) {
-        laptopService.deleteLaptop(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> deleteLaptop(@PathVariable Long id) {
+        boolean delete = laptopService.deleteLaptop(id);
+        return new ResponseEntity<>(delete, HttpStatus.OK);
     }
+
 }

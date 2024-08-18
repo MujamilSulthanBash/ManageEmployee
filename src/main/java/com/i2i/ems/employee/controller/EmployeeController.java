@@ -2,6 +2,7 @@ package com.i2i.ems.employee.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class EmployeeController {
      * @return The created {@link EmployeeDto} with HTTP status 201 CREATED.
      */
     @PostMapping
-    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto) {
+    public ResponseEntity<EmployeeDto> createEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
         return new ResponseEntity<>(employeeService.saveEmployee(employeeDto), HttpStatus.CREATED);
     }
 
@@ -78,7 +79,7 @@ public class EmployeeController {
      * @return the updated {@link EmployeeDto} with HTTP status 200 OK.
      */
     @PutMapping()
-    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto updateEmployeeDto) {
+    public ResponseEntity<EmployeeDto> updateEmployee(@Valid @RequestBody EmployeeDto updateEmployeeDto) {
         return new ResponseEntity<>(employeeService.updateEmployee(updateEmployeeDto), HttpStatus.OK);
     }
 
@@ -89,9 +90,9 @@ public class EmployeeController {
      * @return HTTP status 200 OK.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
-        employeeService.deleteEmployee(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> deleteEmployee(@PathVariable Long id) {
+        boolean deleteEmployee = employeeService.deleteEmployee(id);
+        return new ResponseEntity<>(deleteEmployee, HttpStatus.OK);
     }
 
     /**
@@ -103,7 +104,7 @@ public class EmployeeController {
      */
     @PutMapping("{employeeId}/departments/{departmentId}")
     public ResponseEntity<EmployeeDto> assignDepartment(@PathVariable Long employeeId, @PathVariable Long departmentId) {
-        return new ResponseEntity<>(employeeService.assignDepartment(employeeId, departmentId), HttpStatus.CREATED);
+        return new ResponseEntity<>(employeeService.assignDepartment(employeeId, departmentId), HttpStatus.OK);
     }
 
     /**
@@ -115,8 +116,7 @@ public class EmployeeController {
      */
     @PutMapping("{employeeId}/projects/{projectId}")
     public ResponseEntity<EmployeeDto> assignProject(@PathVariable Long employeeId, @PathVariable Long projectId) {
-        return new ResponseEntity<>(employeeService.assignProject(employeeId, projectId), HttpStatus.OK
-        );
+        return new ResponseEntity<>(employeeService.assignProject(employeeId, projectId), HttpStatus.OK);
     }
 
 }

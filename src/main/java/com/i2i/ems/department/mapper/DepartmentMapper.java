@@ -2,6 +2,7 @@ package com.i2i.ems.department.mapper;
 
 import com.i2i.ems.department.dto.DepartmentDto;
 import com.i2i.ems.model.Department;
+import com.i2i.ems.utility.EmployeeRecord;
 
 /**
  * Utility class for mapping between Department and DepartmentDTO.
@@ -22,10 +23,11 @@ public class DepartmentMapper {
      * @param department {@link Department} The Employee entity to be converted.
      * @return {@link DepartmentDto} The corresponding Employee DTO.
      */
-    public static DepartmentDto mapDepartmentDto(Department department) {
+    public DepartmentDto mapDepartmentDto(Department department) {
         return DepartmentDto.builder()
                 .id(department.getId())
                 .name(department.getName())
+                .employeeNames(EmployeeRecord.getListOfEmployees(department.getEmployees()))
                 .build();
     }
 
@@ -36,7 +38,7 @@ public class DepartmentMapper {
      * @param departmentDto {@link DepartmentDto} The Employee DTO to be converted.
      * @return {@link Department} The corresponding Employee entity.
      */
-    public static Department mapDepartment(DepartmentDto departmentDto) {
+    public Department mapDepartment(DepartmentDto departmentDto) {
         return Department.builder()
                 .name(departmentDto.getName())
                 .build();

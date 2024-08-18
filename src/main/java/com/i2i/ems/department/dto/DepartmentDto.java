@@ -1,5 +1,7 @@
 package com.i2i.ems.department.dto;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -23,4 +25,5 @@ public class DepartmentDto {
     @NotBlank(message = "should contain alphabets")
     @Pattern(regexp = "^[a-zA-Z]+([ ][a-zA-Z]+)*$", message = "Name should be alphabets" )
     private String name;
+    private List<String> employeeNames;
 }
